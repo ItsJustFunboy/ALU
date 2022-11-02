@@ -152,11 +152,8 @@ bool XNOR(bool A, bool B) {
 
 byte HalfAdd(bit A, bit B) {
 
-    bool inputA = A.state;
-    bool inputB = B.state;
-
-    bool sum = XOR(inputA, inputB);
-    bool carry = AND(inputA, inputB);
+    bool sum = XOR(A.state, B.state);
+    bool carry = AND(A.state, B.state);
 
     byte returnedByte;
 
@@ -390,6 +387,58 @@ byte Add8(byte A, byte B, bool carryIn) {
   
         return returnedByte;
 
+    }
+
+}
+
+// SUB
+
+byte HalfAdd(bit A, bit B) {
+
+
+    bool sum = XOR(A.state, B.state);
+    bool carry = AND(NOT(A.state), B.state);
+
+    byte returnedByte;
+
+    returnedByte.T1.state = sum;
+    returnedByte.CarryOut.state = carry;
+
+    return returnedByte;
+
+}
+
+byte Add1(byte A, byte B, bool carryIn) {
+
+    bool x1 = XOR(A.T1.state, B.T1.state);
+    bool a1 = AND(A.T1.state, B.T1.state);
+    bool x2 = XOR(x1, carryIn);
+    bool a2 = AND(carryIn, x1);
+    bool o1 = OR(a1, a2);
+
+    if (o1) {
+        byte returnedByte;
+
+        returnedByte.T1.state = 0;
+        returnedByte.T2.state = 0;
+        returnedByte.T3.state = 0;
+        returnedByte.T4.state = 0;
+        returnedByte.T5.state = 0;
+        returnedByte.T6.state = 0;
+        returnedByte.T7.state = 0;
+        returnedByte.T8.state = 0;
+
+        printf("WARNING::SUB1BYTE_OVERFLOW; BYTE RESET.\n");
+
+        return returnedByte;
+
+    }
+    else {
+
+        byte returnedByte;
+        returnedByte.T1.state = x2;
+
+        return returnedByte;
     }
 
 }
