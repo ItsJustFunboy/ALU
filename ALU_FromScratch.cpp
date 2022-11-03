@@ -393,7 +393,7 @@ byte Add8(byte A, byte B, bool carryIn) {
 
 // SUB
 
-byte HalfAdd(bit A, bit B) {
+byte HalfSub(bit A, bit B) {
 
 
     bool sum = XOR(A.state, B.state);
@@ -408,12 +408,12 @@ byte HalfAdd(bit A, bit B) {
 
 }
 
-byte Add1(byte A, byte B, bool carryIn) {
+byte Sub1(byte A, byte B, bool borrowIn) {
 
     bool x1 = XOR(A.T1.state, B.T1.state);
-    bool a1 = AND(A.T1.state, B.T1.state);
-    bool x2 = XOR(x1, carryIn);
-    bool a2 = AND(carryIn, x1);
+    bool a1 = AND(NOT(A.T1.state), B.T1.state);
+    bool x2 = XOR(x1, borrowIn);
+    bool a2 = AND(borrowIn, NOT(x1));
     bool o1 = OR(a1, a2);
 
     if (o1) {
